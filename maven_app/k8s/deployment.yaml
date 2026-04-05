@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: string-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: string-service
+  template:
+    metadata:
+      labels:
+        app: string-service
+    spec:
+      containers:
+      - name: string-app
+        image: your-docker-id/string-service:latest
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+          requests:
+            cpu: "200m"
+            memory: "128Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: string-service-svc
+spec:
+  type: NodePort
+  selector:
+    app: string-service
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30001
